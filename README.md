@@ -1,0 +1,4 @@
+CreatorStyleEdit
+================
+
+A plugin for the QtCreator which can set the colors of navigation widgets and output panes.
