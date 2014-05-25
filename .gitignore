@@ -19,3 +19,9 @@
 *.exe
 *.out
 *.app
+
+# Project user files
+*.user
+
+# Temporary files 
+*~

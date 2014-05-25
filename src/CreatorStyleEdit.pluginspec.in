@@ -1,0 +1,9 @@
+<plugin name=\"CreatorStyleEdit\" version=\"0.0.1\" compatVersion=\"0.0.1\">
+    <vendor>CreatorStyleEdit</vendor>
+    <copyright>MIT</copyright>
+    <license>MIT</license>
+    <description>A plugin for the QtCreator which can set the colors of navigation widgets and output panes.</description>
+    <url>http://beige.github.io/CreatorStyleEdit</url>
+    $$dependencyList
+</plugin>
+
