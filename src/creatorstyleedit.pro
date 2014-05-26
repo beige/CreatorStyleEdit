@@ -16,11 +16,11 @@ HEADERS += creatorstyleeditplugin.h \
 
 ## set the QTC_SOURCE environment variable to override the setting here
 QTCREATOR_SOURCES = $$(QTC_SOURCE)
-isEmpty(QTCREATOR_SOURCES):QTCREATOR_SOURCES=/home/thomas/Projekte/qt-creator-opensource-src-3.1.1
+isEmpty(QTCREATOR_SOURCES):QTCREATOR_SOURCES=/path/to/creator/sources
 
 ## set the QTC_BUILD environment variable to override the setting here
 IDE_BUILD_TREE = $$(QTC_BUILD)
-isEmpty(IDE_BUILD_TREE):IDE_BUILD_TREE=/home/thomas/bin/Qt/Qt5.3.0/Tools/QtCreator
+isEmpty(IDE_BUILD_TREE):IDE_BUILD_TREE=/path/to/build/environment
 
 ## uncomment to build plugin into user config directory
 ## <localappdata>/plugins/<ideversion>
