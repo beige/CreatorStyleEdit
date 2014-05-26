@@ -1,37 +1,47 @@
 ---
+overview: true
 ---
 {% include header.htm %}
           <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
+<p>This is the project page of CreatorStyleEdit, a plugin for the Qt Creator IDE. It is used to colorize the navigation widgets and the output panes by setting a user defined QPalette on them.</p>
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
+<a name="why-no-stylesheets" class="anchor" href="#why-no-stylesheets"><span class="octicon octicon-link"></span></a>Why no stylesheets?</h3>
+<p>I've used QtCreator with the -stylesheet command line argument to get a dark color scheme. Since QtCreator 3.1.1, this doesn't seem to work properly and seems to be a bug in QtCreator.</p>
+<p>After investigating the QtCreator sources, I've found out that it is using an application wide custom stlye (so called Manhattan Style) and that the Qt documentation states that Qt style sheets are currently not supported for custom QStyle subclasses. So I decided, that I will write a small plugin which sets the QPalette directly on the widget classes that are not styled by the color scheme for the text editor.</p>
+<h5>Future Development</h5>
+<p>Future development could include the possibility to set and edit stylesheets on QtCreator at runtime. This has the advantage, that QtCreator must not be closed and started again for editing the style sheet.</p>
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+<p>Copy plugin folder to QtCreator's plugin folder.</p>
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
+<a name="what-will-be-styled" class="anchor" href="#what-will-be-styled"><span class="octicon octicon-link"></span></a>Which Widgets will be styled?</h3>
+<h5>Navigation widgets</h5>
+<ul>
+	<li>Projects</li>
+	<li>Open Documents</li>
+	<li>Bookmarks</li>
+	<li>File System</li>
+	<li>Class View</li>
+	<li>Outline</li>
+	<li>Type Hierarchy</li>
+	<li>Include Hierarchy</li>
+</ul>
+<h5>Output Panes</h5>
+<ul>
+	<li>Issues</li>
+	<li>Search Results</li>
+	<li>Application Output</li>
+	<li>Compile Output</li>
+	<li>QML/JS Console</li>
+	<li>General Messages</li>
+	<li>Version Control</li>
+</ul>
 <h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<h3>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-
+<p>MIT License</p>
 
 {% include footer.htm %}

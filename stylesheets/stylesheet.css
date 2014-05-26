@@ -88,6 +88,18 @@ nav li {
   display: inline;
 }
 
+nav li a,
+nav li a:hover {
+  font-size: 22px;
+  font-weight: bold;
+  color: #303030;
+}
+
+nav li.current a,
+nav li.current a:hover {
+  color: #d5000d;
+}
+
 #container {
   background: transparent url(../images/highlight-bg.jpg) 50% 0 no-repeat;
   min-height: 595px;
@@ -156,16 +168,16 @@ a.button span {
   height: 23px;
 }
 
-#download-zip span {
+#windows-download span {
   background: transparent url(../images/zip-icon.png) 12px 50% no-repeat;
 }
-#download-tar-gz span {
+#linux-download span {
   background: transparent url(../images/tar-gz-icon.png) 12px 50% no-repeat;
 }
-#view-on-github span {
+#mac-download span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
-#view-on-github {
+#mac-download {
   margin-right: 0;
 }
 
