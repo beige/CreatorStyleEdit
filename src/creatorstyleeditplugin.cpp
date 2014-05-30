@@ -83,7 +83,7 @@ ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
 
 void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
 {
-    const char *projectViewClass = "ProjectExplorer::Internal::ProjectTreeWidget";
+    const char *projectViewClass = "Utils::NavigationTreeView";
     const char *bookmarksViewClass = "Bookmarks::Internal::BookmarkView";
     const char *classViewClass = "ClassView::Internal::NavigationWidget";
     const char *openEditorsViewClass = "Core::Internal::OpenEditorsWidget";
@@ -224,6 +224,7 @@ QString CreatorStyleEditPlugin::settingsKey(const QString &key) const
 void CreatorStyleEditPlugin::triggerAction()
 {
     m_styleEditor->show();
+    m_styleEditor->raise();
 }
 
 void CreatorStyleEditPlugin::setPaletteOnClass(const QPalette &palette, const char *className)
