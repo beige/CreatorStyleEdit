@@ -19,6 +19,26 @@ StyleEditor::StyleEditor(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->buttonBox, &QDialogButtonBox::clicked,
             this, &StyleEditor::buttonClicked);
+
+    // Raise this dialog for MAC OS X
+    connect(ui->baseSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->textSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->brightTextSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->windowSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->windowTextSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->lightSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->midSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->darkSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->buttonSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
 }
 
 StyleEditor::~StyleEditor()
@@ -69,4 +89,9 @@ void StyleEditor::buttonClicked(QAbstractButton *button)
     {
         setUiFromPalette(QApplication::palette());
     }
+}
+
+void StyleEditor::newColorSelected()
+{
+    raise();
 }

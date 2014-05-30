@@ -33,6 +33,7 @@ signals:
 
 private slots:
     void buttonClicked(QAbstractButton *button);
+    void newColorSelected();
 
 private:
     Ui::StyleEditor *ui;
