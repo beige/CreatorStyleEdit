@@ -5,16 +5,23 @@ overview: true
           <h3>
 <a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome</h3>
 
-<p>This is the project page of CreatorStyleEdit, a plugin for the Qt Creator IDE. It is used to colorize the navigation widgets and the output panes by setting a user defined QPalette on them.</p>
+<p>This is the project page of <a href="https://github.com/beige/CreatorStyleEdit">CreatorStyleEdit</a>, a plugin for the Qt Creator IDE. It is used to colorize the navigation widgets and the output panes by setting a user defined QPalette on them.</p>
 <h3>
 <a name="why-no-stylesheets" class="anchor" href="#why-no-stylesheets"><span class="octicon octicon-link"></span></a>Why no stylesheets?</h3>
-<p>I've used QtCreator with the -stylesheet command line argument to get a dark color scheme. Since QtCreator 3.1.1, this doesn't seem to work properly and seems to be a bug in QtCreator.</p>
+<p>I've used QtCreator with the -stylesheet command line argument to get a dark color scheme. Since QtCreator 3.1.1, this doesn't seem to work properly and seems to be a bug in QtCreator (<a href="https://bugreports.qt-project.org/browse/QTCREATORBUG-12078">see Qt Bug #12078</a>).</p>
 <p>After investigating the QtCreator sources, I've found out that it is using an application wide custom stlye (so called Manhattan Style) and that the Qt documentation states that Qt style sheets are currently not supported for custom QStyle subclasses. So I decided, that I will write a small plugin which sets the QPalette directly on the widget classes that are not styled by the color scheme for the text editor.</p>
 <h5>Future Development</h5>
 <p>Future development could include the possibility to set and edit stylesheets on QtCreator at runtime. This has the advantage, that QtCreator must not be closed and started again for editing the style sheet.</p>
 <h3>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
-<p>Copy plugin folder to QtCreator's plugin folder.</p>
+<p>For installation, just copy the CreatorStyleEdit folder into the plugin directory of QtCreator. Which is located as follows:</p>
+<h4>Windows</h4>
+<p>Under Windows, the plugin directory of QtCreator is located in the QtCreator installation dir under <code>lib\qtcreator\plugins</code>. 
+If you have installed QtCreator along with Qt 5.3.0 in C:\Qt\Qt5.3.0, the plugin directory will be at <code>C:\Qt\Qt5.3.0\Tools\QtCreator\lib\qtcreator\plugins</code></p>
+<h4>Linux</h4>
+<p>If you have installed Qt into your home directory, the path to the plugin directory is similar to the Windows path. As an example, if you have installed Qt into a directory /home/yourname/bin/Qt5.3.0, the QtCreator plugin directory will be at <code>/home/yourname/bin/Qt5.3.0/Tools/QtCreator/lib/qtcreator/plugins/</code></p>
+<h4>Mac OS X</h4>
+<p>Under Mac OS X, the directory for QtCreator plugins is located directly in the Qt Creator.app under <code>Qt Creator.app/Contents/PlugIns</code>. To open the app as directory, navigate to the app, open the context menu and click on Show package content. Now you can see the Contents directory.</p>
 <h3>
 <a name="what-will-be-styled" class="anchor" href="#what-will-be-styled"><span class="octicon octicon-link"></span></a>Which Widgets will be styled?</h3>
 <h5>Navigation widgets</h5>
@@ -38,7 +45,8 @@ overview: true
 	<li>General Messages</li>
 	<li>Version Control</li>
 </ul>
-<h3>
+<h5>Debugging Widgets</h5>
+<p>All debugging widgets will be styled, which includes e.g. the stack view, locals and expressions and the thread view.</p>
 <h3>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
 
