@@ -114,6 +114,11 @@ nav li.current a:hover {
   max-width: 100%;
 }
 
+#container .inner img.thumb-image {
+  max-height: 150px;
+  margin-left: 50px;
+}
+
 #downloads {
   margin-bottom: 40px;
 }
