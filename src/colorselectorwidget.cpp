@@ -2,7 +2,7 @@
  * @author  Thomas Baumann <teebaum@ymail.com>
  *
  * @section LICENSE
- * Licensed under the GNU GENERAL PUBLIC LICENSE. See LICENSE for details.
+ * Licensed under the MIT License. See LICENSE for details.
  *
  */
 

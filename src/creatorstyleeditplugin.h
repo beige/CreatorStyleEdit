@@ -1,3 +1,11 @@
+/**
+ * @author  Thomas Baumann <teebaum@ymail.com>
+ *
+ * @section LICENSE
+ * Licensed under the MIT License. See LICENSE for details.
+ *
+ */
+
 #ifndef CREATORSTYLEEDIT_H
 #define CREATORSTYLEEDIT_H
 
