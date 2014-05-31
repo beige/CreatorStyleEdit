@@ -83,14 +83,14 @@ ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
 
 void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
 {
-    const char *projectViewClass = "Utils::NavigationTreeView";
-    const char *bookmarksViewClass = "Bookmarks::Internal::BookmarkView";
-    const char *classViewClass = "ClassView::Internal::NavigationWidget";
-    const char *openEditorsViewClass = "Core::Internal::OpenEditorsWidget";
-    const char *cppTypeHierarchyViewClass = "CppEditor::Internal::CppTypeHierarchyWidget";
-    const char *cppIncludeHierarchyViewClass = "CppEditor::Internal::CppIncludeHierarchyStackedWidget";
-    const char *folderNavigationWidgetViewClass = "ProjectExplorer::Internal::FolderNavigationWidget";
-    const char *outlineViewClass = "TextEditor::Internal::OutlineWidgetStack";
+    const char *projectViewClass =                  "Utils::NavigationTreeView";
+    const char *bookmarksViewClass =                "Bookmarks::Internal::BookmarkView";
+    const char *classViewClass =                    "ClassView::Internal::NavigationWidget";
+    const char *openEditorsViewClass =              "Core::Internal::OpenEditorsWidget";
+    const char *cppTypeHierarchyViewClass =         "CppEditor::Internal::CppTypeHierarchyWidget";
+    const char *cppIncludeHierarchyViewClass =      "CppEditor::Internal::CppIncludeHierarchyStackedWidget";
+    const char *folderNavigationWidgetViewClass =   "ProjectExplorer::Internal::FolderNavigationWidget";
+    const char *outlineViewClass =                  "TextEditor::Internal::OutlineWidgetStack";
 
     setPaletteOnClass(palette, projectViewClass);
     setPaletteOnClass(palette, bookmarksViewClass);
@@ -102,16 +102,16 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     setPaletteOnClass(palette, outlineViewClass);
 
     // Output panes
-    const char *searchResulScrollAreaClass = "Core::Internal::InternalScrollArea";
-    const char *searchResultWidgetClass = "Core::Internal::SearchResultWidget";
-    const char *messageOutputWindowClass = "Core::OutputWindow";
-    const char *applicationOutputWindowClass = "ProjectExplorer::Internal::TabWidget";
-    const char *compileOutputWindowClass = "ProjectExplorer::Internal::CompileOutputTextEdit";
-    const char *taskOutputWindowClass = "ProjectExplorer::Internal::TaskView";
-    const char *qmlConsoleOutputWindowClass = "QmlJSTools::Internal::QmlConsoleView";
-    const char *qmlConsoleWindowClass = "QmlJSTools::Internal::QWidget";
-    const char *todoWindowClass = "Todo::Internal::TodoOutputTreeView";
-    const char *versionControlWindowClass = "VcsBase::Internal::OutputWindowPlainTextEdit";
+    const char *searchResulScrollAreaClass =    "Core::Internal::InternalScrollArea";
+    const char *searchResultWidgetClass =       "Core::Internal::SearchResultWidget";
+    const char *messageOutputWindowClass =      "Core::OutputWindow";
+    const char *applicationOutputWindowClass =  "ProjectExplorer::Internal::TabWidget";
+    const char *compileOutputWindowClass =      "ProjectExplorer::Internal::CompileOutputTextEdit";
+    const char *taskOutputWindowClass =         "ProjectExplorer::Internal::TaskView";
+    const char *qmlConsoleOutputWindowClass =   "QmlJSTools::Internal::QmlConsoleView";
+    const char *qmlConsoleWindowClass =         "QmlJSTools::Internal::QWidget";
+    const char *todoWindowClass =               "Todo::Internal::TodoOutputTreeView";
+    const char *versionControlWindowClass =     "VcsBase::Internal::OutputWindowPlainTextEdit";
 
     // Output panes
     setPaletteOnClass(palette, searchResulScrollAreaClass);
@@ -124,6 +124,29 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     setPaletteOnClass(palette, qmlConsoleWindowClass);
     setPaletteOnClass(palette, todoWindowClass);
     setPaletteOnClass(palette, versionControlWindowClass);
+
+    // Debugging outputs
+    const char *baseTreeView =          "Debugger::Internal::BaseTreeView";
+    const char *breakTreeView =         "Debugger::Internal::BreakTreeView";
+    const char *modulesTreeView =       "Debugger::Internal::ModulesTreeView";
+    const char *registerTreeView =      "Debugger::Internal::RegisterTreeView";
+    const char *snapshotTreeView =      "Debugger::Internal::SnapshotTreeView";
+    const char *sourceFilesTreeView =   "Debugger::Internal::SourceFilesTreeView";
+    const char *stackTreeView =         "Debugger::Internal::StackTreeView";
+    const char *threadsTreeView =       "Debugger::Internal::ThreadsTreeView";
+    const char *watchTreeView =         "Debugger::Internal::WatchTreeView";
+    const char *valgrindTreeView =      "Valgrind::Internal::CostView";
+
+    setPaletteOnClass(palette, baseTreeView);
+    setPaletteOnClass(palette, breakTreeView);
+    setPaletteOnClass(palette, modulesTreeView);
+    setPaletteOnClass(palette, registerTreeView);
+    setPaletteOnClass(palette, snapshotTreeView);
+    setPaletteOnClass(palette, sourceFilesTreeView);
+    setPaletteOnClass(palette, stackTreeView);
+    setPaletteOnClass(palette, threadsTreeView);
+    setPaletteOnClass(palette, watchTreeView);
+    setPaletteOnClass(palette, valgrindTreeView);
 }
 
 QColor CreatorStyleEditPlugin::colorFromSettings(QSettings *settings, QPalette::ColorRole colorRole) const
