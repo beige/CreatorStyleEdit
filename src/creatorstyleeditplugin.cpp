@@ -39,6 +39,12 @@ static const QString lightColorSettingKey(QStringLiteral("light"));
 static const QString midColorSettingKey(QStringLiteral("mid"));
 static const QString darkColorSettingKey(QStringLiteral("dark"));
 static const QString buttonColorSettingKey(QStringLiteral("button"));
+static const QString alternateBaseColorSettingKey(QStringLiteral("alternate base"));
+static const QString buttonTextColorSettingKey(QStringLiteral("button text"));
+static const QString midlightColorSettingKey(QStringLiteral("midlight"));
+static const QString shadowColorSettingKey(QStringLiteral("shadow"));
+static const QString highlightColorSettingKey(QStringLiteral("highlighted"));
+static const QString highlightedTextColorSettingKey(QStringLiteral("highlighted text"));
 
 } // namespace Internal
 } // namespace CreatorStyleEdit
@@ -182,6 +188,12 @@ QPalette CreatorStyleEditPlugin::paletteFromSettings() const
     palette.setColor(QPalette::Mid, colorFromSettings(settings, QPalette::Mid));
     palette.setColor(QPalette::Dark, colorFromSettings(settings, QPalette::Dark));
     palette.setColor(QPalette::Button, colorFromSettings(settings, QPalette::Button));
+    palette.setColor(QPalette::AlternateBase, colorFromSettings(settings, QPalette::AlternateBase));
+    palette.setColor(QPalette::ButtonText, colorFromSettings(settings, QPalette::ButtonText));
+    palette.setColor(QPalette::Midlight, colorFromSettings(settings, QPalette::Midlight));
+    palette.setColor(QPalette::Shadow, colorFromSettings(settings, QPalette::Shadow));
+    palette.setColor(QPalette::Highlight, colorFromSettings(settings, QPalette::Highlight));
+    palette.setColor(QPalette::HighlightedText, colorFromSettings(settings, QPalette::HighlightedText));
 
     return palette;
 }
@@ -208,6 +220,18 @@ void CreatorStyleEditPlugin::writePaletteToSettings(const QPalette &palette)
                        palette.color(QPalette::Dark).name());
     settings->setValue(settingsKeyForColorRole(QPalette::Button),
                        palette.color(QPalette::Button).name());
+    settings->setValue(settingsKeyForColorRole(QPalette::AlternateBase),
+                       palette.color(QPalette::AlternateBase).name());
+    settings->setValue(settingsKeyForColorRole(QPalette::ButtonText),
+                       palette.color(QPalette::ButtonText).name());
+    settings->setValue(settingsKeyForColorRole(QPalette::Midlight),
+                       palette.color(QPalette::Midlight).name());
+    settings->setValue(settingsKeyForColorRole(QPalette::Shadow),
+                       palette.color(QPalette::Shadow).name());
+    settings->setValue(settingsKeyForColorRole(QPalette::Highlight),
+                       palette.color(QPalette::Highlight).name());
+    settings->setValue(settingsKeyForColorRole(QPalette::HighlightedText),
+                       palette.color(QPalette::HighlightedText).name());
 }
 
 QString CreatorStyleEditPlugin::settingsKeyForColorRole(QPalette::ColorRole role) const
@@ -239,6 +263,24 @@ QString CreatorStyleEditPlugin::settingsKeyForColorRole(QPalette::ColorRole role
     }
     case QPalette::Button: {
         return settingsKey(buttonColorSettingKey);
+    }
+    case QPalette::AlternateBase: {
+        return settingsKey(alternateBaseColorSettingKey);
+    }
+    case QPalette::ButtonText: {
+        return settingsKey(buttonTextColorSettingKey);
+    }
+    case QPalette::Midlight: {
+        return settingsKey(midlightColorSettingKey);
+    }
+    case QPalette::Shadow: {
+        return settingsKey(shadowColorSettingKey);
+    }
+    case QPalette::Highlight: {
+        return settingsKey(highlightColorSettingKey);
+    }
+    case QPalette::HighlightedText: {
+        return settingsKey(highlightedTextColorSettingKey);
     }
     default:
         return settingsKey(baseColorSettingKey);

@@ -39,6 +39,18 @@ StyleEditor::StyleEditor(QWidget *parent) :
             this, &StyleEditor::newColorSelected);
     connect(ui->buttonSelector, &ColorSelectorWidget::colorChanged,
             this, &StyleEditor::newColorSelected);
+    connect(ui->alternateBaseSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->buttonTextSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->midlightSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->shadowSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->highlightSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
+    connect(ui->highlightedTextSelector, &ColorSelectorWidget::colorChanged,
+            this, &StyleEditor::newColorSelected);
 }
 
 StyleEditor::~StyleEditor()
@@ -57,6 +69,12 @@ void StyleEditor::setUiFromPalette(const QPalette &palette)
     ui->midSelector->setColor(palette.color(QPalette::Mid));
     ui->darkSelector->setColor(palette.color(QPalette::Dark));
     ui->buttonSelector->setColor(palette.color(QPalette::Button));
+    ui->alternateBaseSelector->setColor(palette.color(QPalette::AlternateBase));
+    ui->buttonTextSelector->setColor(palette.color(QPalette::ButtonText));
+    ui->midlightSelector->setColor(palette.color(QPalette::Midlight));
+    ui->shadowSelector->setColor(palette.color(QPalette::Shadow));
+    ui->highlightSelector->setColor(palette.color(QPalette::Highlight));
+    ui->highlightedTextSelector->setColor(palette.color(QPalette::HighlightedText));
 }
 
 QPalette StyleEditor::paletteFromUi() const
@@ -71,6 +89,12 @@ QPalette StyleEditor::paletteFromUi() const
     palette.setColor(QPalette::Mid, ui->midSelector->color());
     palette.setColor(QPalette::Dark, ui->darkSelector->color());
     palette.setColor(QPalette::Button, ui->buttonSelector->color());
+    palette.setColor(QPalette::AlternateBase, ui->alternateBaseSelector->color());
+    palette.setColor(QPalette::ButtonText, ui->buttonTextSelector->color());
+    palette.setColor(QPalette::Midlight, ui->midlightSelector->color());
+    palette.setColor(QPalette::Shadow, ui->shadowSelector->color());
+    palette.setColor(QPalette::Highlight, ui->highlightSelector->color());
+    palette.setColor(QPalette::HighlightedText, ui->highlightedTextSelector->color());
 
     return palette;
 }
