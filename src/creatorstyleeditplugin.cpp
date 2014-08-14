@@ -17,6 +17,7 @@
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
+#include <utils/stylehelper.h>
 
 #include <QSettings>
 #include <QString>
@@ -97,6 +98,9 @@ ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
 
 void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
 {
+    // Set Qt Creator base color
+    Utils::StyleHelper::setBaseColor(palette.base().color());
+
     const char *projectViewClass =                  "Utils::NavigationTreeView";
     const char *bookmarksViewClass =                "Bookmarks::Internal::BookmarkView";
     const char *classViewClass =                    "ClassView::Internal::NavigationWidget";
