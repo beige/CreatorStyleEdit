@@ -34,8 +34,12 @@ signals:
 private slots:
     void buttonClicked(QAbstractButton *button);
     void newColorSelected();
+    void exportStyle();
+    void importStyle();
 
 private:
+    QJsonObject paletteToJson(const QPalette &palette);
+    QPalette paletteFromJson(const QJsonObject &json);
     Ui::StyleEditor *ui;
 };
 

@@ -30,6 +30,7 @@ public:
     ~CreatorStyleEditPlugin();
 
     bool initialize(const QStringList &arguments, QString *errorString);
+    bool delayedInitialize();
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 

@@ -4,13 +4,16 @@ DEFINES += CREATORSTYLEEDIT_LIBRARY
 
 SOURCES += creatorstyleeditplugin.cpp \
     styleeditor.cpp \
-    colorselectorwidget.cpp
+    colorselectorwidget.cpp \
+    applicationproxystyle.cpp
 
 HEADERS += creatorstyleeditplugin.h \
         creatorstyleedit_global.h \
         creatorstyleeditconstants.h \
     styleeditor.h \
-    colorselectorwidget.h
+    colorselectorwidget.h \
+    applicationproxystyle.h \
+    defines.h
 
 # Qt Creator linking
 

@@ -6,8 +6,14 @@
  *
  */
 
-#include <QApplication>
+#include <QDir>
+#include <QFile>
+#include <QFileDialog>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QAbstractButton>
+
+#include "defines.h"
 #include "styleeditor.h"
 
 using namespace CreatorStyleEdit::Internal;
@@ -19,6 +25,10 @@ StyleEditor::StyleEditor(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->buttonBox, &QDialogButtonBox::clicked,
             this, &StyleEditor::buttonClicked);
+    connect(ui->exportPushButton, &QPushButton::clicked,
+            this, &StyleEditor::exportStyle);
+    connect(ui->importPushButton, &QPushButton::clicked,
+            this, &StyleEditor::importStyle);
 
     // Raise this dialog for MAC OS X
     connect(ui->baseSelector, &ColorSelectorWidget::colorChanged,
@@ -118,4 +128,88 @@ void StyleEditor::buttonClicked(QAbstractButton *button)
 void StyleEditor::newColorSelected()
 {
     raise();
+}
+
+void StyleEditor::exportStyle()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export style"), QDir::homePath(),
+                                                    QStringLiteral("Json (*.json)"));
+
+    if (fileName.isEmpty())
+        return;
+
+    if (!fileName.endsWith(QStringLiteral(".json"))) {
+        fileName.append(QStringLiteral(".json"));
+    }
+
+    QJsonDocument jsonDoc(paletteToJson(paletteFromUi()));
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+    file.write(jsonDoc.toJson());
+    file.close();
+}
+
+void StyleEditor::importStyle()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Import style"), QDir::homePath(),
+                                                    QStringLiteral("Json (*.json)"));
+
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
+    file.close();
+
+    QJsonObject jsonStyle = jsonDoc.object();
+    if (jsonStyle.isEmpty())
+        return;
+
+    QPalette palette = paletteFromJson(jsonStyle);
+    setUiFromPalette(palette);
+
+    emit paletteChanged(palette);
+}
+
+QJsonObject StyleEditor::paletteToJson(const QPalette &palette)
+{
+    QJsonObject json;
+    json.insert(baseColorSettingKey, palette.base().color().name());
+    json.insert(textColorSettingKey, palette.text().color().name());
+    json.insert(brightTextColorSettingKey, palette.brightText().color().name());
+    json.insert(windowColorSettingKey, palette.window().color().name());
+    json.insert(windowTextColorSettingKey, palette.windowText().color().name());
+    json.insert(lightColorSettingKey, palette.light().color().name());
+    json.insert(midColorSettingKey, palette.mid().color().name());
+    json.insert(darkColorSettingKey, palette.dark().color().name());
+    json.insert(buttonColorSettingKey, palette.button().color().name());
+    json.insert(alternateBaseColorSettingKey, palette.alternateBase().color().name());
+    json.insert(buttonTextColorSettingKey, palette.buttonText().color().name());
+    json.insert(midlightColorSettingKey, palette.midlight().color().name());
+    json.insert(shadowColorSettingKey, palette.shadow().color().name());
+    json.insert(highlightColorSettingKey, palette.highlight().color().name());
+    json.insert(highlightedTextColorSettingKey, palette.highlightedText().color().name());
+    return json;
+}
+
+QPalette StyleEditor::paletteFromJson(const QJsonObject &json)
+{
+    QPalette palette;
+    palette.setColor(QPalette::Base, QColor(json.value(baseColorSettingKey).toString()));
+    palette.setColor(QPalette::Text, QColor(json.value(textColorSettingKey).toString()));
+    palette.setColor(QPalette::BrightText, QColor(json.value(brightTextColorSettingKey).toString()));
+    palette.setColor(QPalette::Window, QColor(json.value(windowColorSettingKey).toString()));
+    palette.setColor(QPalette::WindowText, QColor(json.value(windowTextColorSettingKey).toString()));
+    palette.setColor(QPalette::Light, QColor(json.value(lightColorSettingKey).toString()));
+    palette.setColor(QPalette::Mid, QColor(json.value(midColorSettingKey).toString()));
+    palette.setColor(QPalette::Dark, QColor(json.value(darkColorSettingKey).toString()));
+    palette.setColor(QPalette::Button, QColor(json.value(buttonColorSettingKey).toString()));
+    palette.setColor(QPalette::AlternateBase, QColor(json.value(alternateBaseColorSettingKey).toString()));
+    palette.setColor(QPalette::ButtonText, QColor(json.value(buttonTextColorSettingKey).toString()));
+    palette.setColor(QPalette::Midlight, QColor(json.value(midlightColorSettingKey).toString()));
+    palette.setColor(QPalette::Shadow, QColor(json.value(shadowColorSettingKey).toString()));
+    palette.setColor(QPalette::Highlight, QColor(json.value(highlightColorSettingKey).toString()));
+    palette.setColor(QPalette::HighlightedText, QColor(json.value(highlightedTextColorSettingKey).toString()));
+    return palette;
 }
