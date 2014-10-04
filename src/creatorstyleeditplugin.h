@@ -42,6 +42,9 @@ private slots:
 private:
     void applyPaletteOnAllWidgets(const QPalette &palette);
     QPalette paletteFromSettings() const;
+    QWidget *widgetForClass(const QString &className);
+    QWidget *childWidgetForClass(QWidget *widget, const QString &className);
+    void resetPaletteOnInputChildWidgets(QWidget *widget);
     void writePaletteToSettings(const QPalette &palette);
     QString settingsKeyForColorRole(QPalette::ColorRole role) const;
     QString settingsKey(const QString &key) const;

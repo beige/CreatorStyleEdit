@@ -19,6 +19,7 @@
 #include <coreplugin/coreconstants.h>
 #include <utils/stylehelper.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/navigationwidget.h>
 
 #include <QSettings>
 #include <QString>
@@ -26,6 +27,7 @@
 #include <QMenu>
 #include <QStatusBar>
 #include <QApplication>
+#include <QStyleFactory>
 
 #include <QtPlugin>
 #include <QDebug>
@@ -109,6 +111,8 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     // Set palette on main window. This affects output panes but not the navigation widgets
     Core::ICore::mainWindow()->setPalette(palette);
 
+    Core::NavigationWidget::instance()->setPalette(palette);
+
     // The locator widget in the status bar has always a black font
     // => Reset its palette to default
     Core::ICore::statusBar()->setPalette(QApplication::palette());
@@ -119,19 +123,29 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     const char *bookmarksViewClass =                "Bookmarks::Internal::BookmarkView";
     const char *classViewClass =                    "ClassView::Internal::NavigationWidget";
     const char *openEditorsViewClass =              "Core::Internal::OpenEditorsWidget";
-    const char *cppTypeHierarchyViewClass =         "CppEditor::Internal::CppTypeHierarchyWidget";
+    const char *cppTypeHierarchyViewClass =         "CppEditor::Internal::CppTypeHierarchyStackedWidget";
     const char *cppIncludeHierarchyViewClass =      "CppEditor::Internal::CppIncludeHierarchyStackedWidget";
     const char *folderNavigationWidgetViewClass =   "ProjectExplorer::Internal::FolderNavigationWidget";
     const char *outlineViewClass =                  "TextEditor::Internal::OutlineWidgetStack";
     const char *NavigationSubwidgetClass =          "Core::Internal::NavigationSubWidget";
     const char *StyledBarClass =                    "Utils::StyledBar";
     const char *NavComboBoxClass =                  "Core::Internal::NavComboBox";
+    const char *ElidingLabelClass =                 "Utils::ElidingLabel";
+
+    // The next two classes are used by the Type Hierarchy and Include Hierarchy as headers.
+    // Setting palette on this class names takes no effect, because they don't have a Q_OBJECT
+    // macro.
+    const char *ClassLabelClass =                   "CppEditor::Internal::CppClassLabel";
+    const char *IncludeLabelClass =                 "CppEditor::Internal::CppIncludeLabel";
 
     // QListViews are getting the palette because the Filesystem navigation widget uses this.
     // This will affect QListViews in other places as well (e.g. configuration dialog)
     const char *ListViewClass =                     "QListView";
 
+    setPaletteOnClass(palette, ElidingLabelClass);
     setPaletteOnClass(palette, ListViewClass);
+    setPaletteOnClass(palette, ClassLabelClass);
+    setPaletteOnClass(palette, IncludeLabelClass);
     setPaletteOnClass(palette, projectViewClass);
     setPaletteOnClass(palette, bookmarksViewClass);
     setPaletteOnClass(palette, classViewClass);
@@ -143,6 +157,21 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     setPaletteOnClass(palette, NavigationSubwidgetClass);
     setPaletteOnClass(palette, StyledBarClass);
     setPaletteOnClass(palette, NavComboBoxClass);
+
+    // QApplication::setPalette doesn't work for relyable for output widgets. So the
+    // palette must be set explicit on the widget
+    QWidget *outputPaneManagerWidget = widgetForClass(QStringLiteral("Core::Internal::OutputPaneManager"));
+    if (outputPaneManagerWidget) {
+        outputPaneManagerWidget->setPalette(palette);
+    }
+
+    // The search widget's input widgets are mostly style dependent and only the text color
+    // is affected by the palette. Because this can get really unreadable, reset the palette for
+    // input widgets here.
+    QWidget *searchWidget = widgetForClass(QStringLiteral("Core::Internal::FindToolWindow"));
+    if (searchWidget) {
+        resetPaletteOnInputChildWidgets(searchWidget);
+    }
 }
 
 QColor CreatorStyleEditPlugin::colorFromSettings(QSettings *settings, QPalette::ColorRole colorRole) const
@@ -200,6 +229,72 @@ QPalette CreatorStyleEditPlugin::paletteFromSettings() const
     palette.setColor(QPalette::HighlightedText, colorFromSettings(settings, QPalette::HighlightedText));
 
     return palette;
+}
+
+QWidget *CreatorStyleEditPlugin::widgetForClass(const QString &className)
+{
+    foreach (QWidget *topLevelWidget, QApplication::topLevelWidgets()) {
+        QWidget *childWidgetWithClass = childWidgetForClass(topLevelWidget, className);
+        if (childWidgetWithClass != 0)
+            return childWidgetWithClass;
+    }
+
+    return 0;
+}
+
+/*!
+ * \brief CreatorStyleEditPlugin::childWidgetForClass
+ *        Get a pointer to a child widget that has a specific class name
+ */
+QWidget *CreatorStyleEditPlugin::childWidgetForClass(QWidget *widget, const QString &className)
+{
+    QString widgetClassName(QString::fromUtf8(widget->metaObject()->className()));
+    if (widgetClassName.contains(className))
+        return widget;
+
+    foreach (QObject *childObject, widget->children()) {
+        if (!childObject->isWidgetType())
+            continue;
+
+        QWidget *childWidget = qobject_cast<QWidget *>(childObject);
+        if (!childWidget)
+            continue;
+
+        widgetClassName = QString::fromUtf8(childWidget->metaObject()->className());
+
+        if (QWidget *subChildWidget = childWidgetForClass(childWidget, className)) {
+            return subChildWidget;
+        }
+    }
+
+    return 0;
+}
+
+/*!
+ * \brief CreatorStyleEditPlugin::resetPaletteOnInputChildWidgets
+ *        Reset the palette of some imput widgets like e.g. QComboBox to default
+ *        QApplication palette. Some Styles doesn't work nicely with a custom palette.
+ * \param widget The widget containing child widgets to reset.
+ */
+void CreatorStyleEditPlugin::resetPaletteOnInputChildWidgets(QWidget *widget)
+{
+    foreach (QObject *childObject, widget->children()) {
+        if (!childObject->isWidgetType())
+            continue;
+
+        QWidget *childWidget = qobject_cast<QWidget *>(childObject);
+        if (!childWidget)
+            continue;
+
+        if (childWidget->inherits("QComboBox") ||
+                childWidget->inherits("QPushButton") ||
+                childWidget->inherits("QLineEdit")) {
+//            qDebug() << "Child palette will be reset: " << childWidget->metaObject()->className();
+            childWidget->setPalette(QApplication::palette());
+        }
+
+        resetPaletteOnInputChildWidgets(childWidget);
+    }
 }
 
 void CreatorStyleEditPlugin::writePaletteToSettings(const QPalette &palette)
