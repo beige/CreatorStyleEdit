@@ -46,6 +46,7 @@ private:
     QString settingsKeyForColorRole(QPalette::ColorRole role) const;
     QString settingsKey(const QString &key) const;
     QColor colorFromSettings(QSettings *settings, QPalette::ColorRole colorRole) const;
+    void debugWidget(QWidget *widget);
     StyleEditor *m_styleEditor;
 };
 

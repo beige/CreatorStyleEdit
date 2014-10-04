@@ -18,14 +18,17 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
 #include <utils/stylehelper.h>
+#include <coreplugin/icore.h>
 
 #include <QSettings>
 #include <QString>
 #include <QAction>
 #include <QMenu>
+#include <QStatusBar>
 #include <QApplication>
 
 #include <QtPlugin>
+#include <QDebug>
 
 #include "defines.h"
 
@@ -98,9 +101,20 @@ ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
 
 void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
 {
-    // Set Qt Creator base color
+    using namespace Core;
+    using namespace Core::Internal;
+    // Set Qt Creator base color. This color affects the frame around the main window
     Utils::StyleHelper::setBaseColor(palette.base().color());
 
+    // Set palette on main window. This affects output panes but not the navigation widgets
+    Core::ICore::mainWindow()->setPalette(palette);
+
+    // The locator widget in the status bar has always a black font
+    // => Reset its palette to default
+    Core::ICore::statusBar()->setPalette(QApplication::palette());
+
+    // The palette on navigation widgest must be set, because the widgets are deleted and
+    // newly created, if the NavigationSubWidget has to show another output
     const char *projectViewClass =                  "Utils::NavigationTreeView";
     const char *bookmarksViewClass =                "Bookmarks::Internal::BookmarkView";
     const char *classViewClass =                    "ClassView::Internal::NavigationWidget";
@@ -109,7 +123,15 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     const char *cppIncludeHierarchyViewClass =      "CppEditor::Internal::CppIncludeHierarchyStackedWidget";
     const char *folderNavigationWidgetViewClass =   "ProjectExplorer::Internal::FolderNavigationWidget";
     const char *outlineViewClass =                  "TextEditor::Internal::OutlineWidgetStack";
+    const char *NavigationSubwidgetClass =          "Core::Internal::NavigationSubWidget";
+    const char *StyledBarClass =                    "Utils::StyledBar";
+    const char *NavComboBoxClass =                  "Core::Internal::NavComboBox";
 
+    // QListViews are getting the palette because the Filesystem navigation widget uses this.
+    // This will affect QListViews in other places as well (e.g. configuration dialog)
+    const char *ListViewClass =                     "QListView";
+
+    setPaletteOnClass(palette, ListViewClass);
     setPaletteOnClass(palette, projectViewClass);
     setPaletteOnClass(palette, bookmarksViewClass);
     setPaletteOnClass(palette, classViewClass);
@@ -118,53 +140,9 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     setPaletteOnClass(palette, cppTypeHierarchyViewClass);
     setPaletteOnClass(palette, folderNavigationWidgetViewClass);
     setPaletteOnClass(palette, outlineViewClass);
-
-    // Output panes
-    const char *searchResulScrollAreaClass =    "Core::Internal::InternalScrollArea";
-    const char *searchResultWidgetClass =       "Core::Internal::SearchResultWidget";
-    const char *messageOutputWindowClass =      "Core::OutputWindow";
-    const char *applicationOutputWindowClass =  "ProjectExplorer::Internal::TabWidget";
-    const char *compileOutputWindowClass =      "ProjectExplorer::Internal::CompileOutputTextEdit";
-    const char *taskOutputWindowClass =         "ProjectExplorer::Internal::TaskView";
-    const char *qmlConsoleOutputWindowClass =   "QmlJSTools::Internal::QmlConsoleView";
-    const char *qmlConsoleWindowClass =         "QmlJSTools::Internal::QWidget";
-    const char *todoWindowClass =               "Todo::Internal::TodoOutputTreeView";
-    const char *versionControlWindowClass =     "VcsBase::Internal::OutputWindowPlainTextEdit";
-
-    // Output panes
-    setPaletteOnClass(palette, searchResulScrollAreaClass);
-    setPaletteOnClass(palette, searchResultWidgetClass);
-    setPaletteOnClass(palette, messageOutputWindowClass);
-    setPaletteOnClass(palette, applicationOutputWindowClass);
-    setPaletteOnClass(palette, compileOutputWindowClass);
-    setPaletteOnClass(palette, taskOutputWindowClass);
-    setPaletteOnClass(palette, qmlConsoleOutputWindowClass);
-    setPaletteOnClass(palette, qmlConsoleWindowClass);
-    setPaletteOnClass(palette, todoWindowClass);
-    setPaletteOnClass(palette, versionControlWindowClass);
-
-    // Debugging outputs
-    const char *baseTreeView =          "Debugger::Internal::BaseTreeView";
-    const char *breakTreeView =         "Debugger::Internal::BreakTreeView";
-    const char *modulesTreeView =       "Debugger::Internal::ModulesTreeView";
-    const char *registerTreeView =      "Debugger::Internal::RegisterTreeView";
-    const char *snapshotTreeView =      "Debugger::Internal::SnapshotTreeView";
-    const char *sourceFilesTreeView =   "Debugger::Internal::SourceFilesTreeView";
-    const char *stackTreeView =         "Debugger::Internal::StackTreeView";
-    const char *threadsTreeView =       "Debugger::Internal::ThreadsTreeView";
-    const char *watchTreeView =         "Debugger::Internal::WatchTreeView";
-    const char *valgrindTreeView =      "Valgrind::Internal::CostView";
-
-    setPaletteOnClass(palette, baseTreeView);
-    setPaletteOnClass(palette, breakTreeView);
-    setPaletteOnClass(palette, modulesTreeView);
-    setPaletteOnClass(palette, registerTreeView);
-    setPaletteOnClass(palette, snapshotTreeView);
-    setPaletteOnClass(palette, sourceFilesTreeView);
-    setPaletteOnClass(palette, stackTreeView);
-    setPaletteOnClass(palette, threadsTreeView);
-    setPaletteOnClass(palette, watchTreeView);
-    setPaletteOnClass(palette, valgrindTreeView);
+    setPaletteOnClass(palette, NavigationSubwidgetClass);
+    setPaletteOnClass(palette, StyledBarClass);
+    setPaletteOnClass(palette, NavComboBoxClass);
 }
 
 QColor CreatorStyleEditPlugin::colorFromSettings(QSettings *settings, QPalette::ColorRole colorRole) const
@@ -176,6 +154,28 @@ QColor CreatorStyleEditPlugin::colorFromSettings(QSettings *settings, QPalette::
     QColor baseColor(colorString);
 
     return baseColor;
+}
+
+/*!
+ * \brief CreatorStyleEditPlugin::debugWidget Debug prints a widget's Class and its child
+ *        widgets classes recursively.
+ * \param widget The widget for debug printing
+ */
+void CreatorStyleEditPlugin::debugWidget(QWidget *widget)
+{
+    foreach (QObject *childObject, widget->children()) {
+        if (!childObject->isWidgetType())
+            continue;
+
+        QWidget *widget = qobject_cast<QWidget *>(childObject);
+        if (!widget)
+            continue;
+
+        QString className(QString::fromUtf8(widget->metaObject()->className()));
+        qDebug() << "Widget class: " << className;
+
+        debugWidget(widget);
+    }
 }
 
 QPalette CreatorStyleEditPlugin::paletteFromSettings() const
