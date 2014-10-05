@@ -108,9 +108,6 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     // Set Qt Creator base color. This color affects the frame around the main window
     Utils::StyleHelper::setBaseColor(palette.base().color());
 
-    // Set palette on main window. This affects output panes but not the navigation widgets
-    Core::ICore::mainWindow()->setPalette(palette);
-
     Core::NavigationWidget::instance()->setPalette(palette);
 
     // The locator widget in the status bar has always a black font
