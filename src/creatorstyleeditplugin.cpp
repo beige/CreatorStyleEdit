@@ -155,6 +155,29 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     setPaletteOnClass(palette, StyledBarClass);
     setPaletteOnClass(palette, NavComboBoxClass);
 
+    // Debugging outputs
+    const char *baseTreeView =          "Debugger::Internal::BaseTreeView";
+    const char *breakTreeView =         "Debugger::Internal::BreakTreeView";
+    const char *modulesTreeView =       "Debugger::Internal::ModulesTreeView";
+    const char *registerTreeView =      "Debugger::Internal::RegisterTreeView";
+    const char *snapshotTreeView =      "Debugger::Internal::SnapshotTreeView";
+    const char *sourceFilesTreeView =   "Debugger::Internal::SourceFilesTreeView";
+    const char *stackTreeView =         "Debugger::Internal::StackTreeView";
+    const char *threadsTreeView =       "Debugger::Internal::ThreadsTreeView";
+    const char *watchTreeView =         "Debugger::Internal::WatchTreeView";
+    const char *valgrindTreeView =      "Valgrind::Internal::CostView";
+
+    setPaletteOnClass(palette, baseTreeView);
+    setPaletteOnClass(palette, breakTreeView);
+    setPaletteOnClass(palette, modulesTreeView);
+    setPaletteOnClass(palette, registerTreeView);
+    setPaletteOnClass(palette, snapshotTreeView);
+    setPaletteOnClass(palette, sourceFilesTreeView);
+    setPaletteOnClass(palette, stackTreeView);
+    setPaletteOnClass(palette, threadsTreeView);
+    setPaletteOnClass(palette, watchTreeView);
+    setPaletteOnClass(palette, valgrindTreeView);
+
     // QApplication::setPalette doesn't work for relyable for output widgets. So the
     // palette must be set explicit on the widget
     QWidget *outputPaneManagerWidget = widgetForClass(QStringLiteral("Core::Internal::OutputPaneManager"));
