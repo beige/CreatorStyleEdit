@@ -192,6 +192,10 @@ void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
     if (searchWidget) {
         resetPaletteOnInputChildWidgets(searchWidget);
     }
+    QWidget *searchToolBar = widgetForClass(QStringLiteral("Core::Internal::FindToolBar"));
+    if (searchToolBar) {
+        resetPaletteOnInputChildWidgets(searchToolBar);
+    }
 }
 
 QColor CreatorStyleEditPlugin::colorFromSettings(QSettings *settings, QPalette::ColorRole colorRole) const
