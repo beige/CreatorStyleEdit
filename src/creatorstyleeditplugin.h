@@ -38,6 +38,7 @@ private slots:
     void triggerAction();
     void setPaletteOnClass(const QPalette &palette, const char *className);
     void paletteChanged(const QPalette &palette);
+    void stylesheetChanged(const QString &fileName);
 
 private:
     void applyPaletteOnAllWidgets(const QPalette &palette);

@@ -30,12 +30,14 @@ public:
 
 signals:
     void paletteChanged(const QPalette &palette);
+    void stylesheetChanged(const QString &stylesheetFile);
 
 private slots:
     void buttonClicked(QAbstractButton *button);
     void newColorSelected();
     void exportStyle();
     void importStyle();
+    void selectStyleSheet();
 
 private:
     QJsonObject paletteToJson(const QPalette &palette);

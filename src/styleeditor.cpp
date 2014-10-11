@@ -30,6 +30,16 @@ StyleEditor::StyleEditor(QWidget *parent) :
     connect(ui->importPushButton, &QPushButton::clicked,
             this, &StyleEditor::importStyle);
 
+    connect(ui->selectStyleSheetPushButton, &QPushButton::clicked,
+            this, &StyleEditor::selectStyleSheet);
+    connect(ui->loadStylesheetPushButton, &QPushButton::clicked,
+            [this] {
+        QString styleFile = ui->stylesheetPathLineEdit->text();
+        if (QFile::exists(styleFile)) {
+            emit stylesheetChanged(styleFile);
+        }
+    });
+
     // Raise this dialog for MAC OS X
     connect(ui->baseSelector, &ColorSelectorWidget::colorChanged,
             this, &StyleEditor::newColorSelected);
@@ -170,6 +180,19 @@ void StyleEditor::importStyle()
     setUiFromPalette(palette);
 
     emit paletteChanged(palette);
+}
+
+void StyleEditor::selectStyleSheet()
+{
+    QString file = QFileDialog::getOpenFileName(this, tr("Select Stylesheet"), QDir::homePath(),
+                                                QStringLiteral("CSS (*.css)"));
+    if (file.isEmpty()) {
+        return;
+    }
+
+    ui->stylesheetPathLineEdit->setText(file);
+
+    emit stylesheetChanged(file);
 }
 
 QJsonObject StyleEditor::paletteToJson(const QPalette &palette)

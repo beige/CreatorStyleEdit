@@ -31,6 +31,7 @@
 
 #include <QtPlugin>
 #include <QDebug>
+#include <QFile>
 
 #include "defines.h"
 
@@ -61,6 +62,8 @@ bool CreatorStyleEditPlugin::initialize(const QStringList &arguments, QString *e
     m_styleEditor = new StyleEditor;
     connect(m_styleEditor, &StyleEditor::paletteChanged,
             this, &CreatorStyleEditPlugin::paletteChanged);
+    connect(m_styleEditor, &StyleEditor::stylesheetChanged,
+            this, &CreatorStyleEditPlugin::stylesheetChanged);
 
     QAction *action = new QAction(tr("Edit Style"), this);
     Core::Command *cmd = Core::ActionManager::registerAction(action, Constants::ACTION_ID,
@@ -103,6 +106,8 @@ ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
 
 void CreatorStyleEditPlugin::applyPaletteOnAllWidgets(const QPalette &palette)
 {
+    return;
+
     using namespace Core;
     using namespace Core::Internal;
     // Set Qt Creator base color. This color affects the frame around the main window
@@ -432,6 +437,23 @@ void CreatorStyleEditPlugin::paletteChanged(const QPalette &palette)
 {
     applyPaletteOnAllWidgets(palette);
     writePaletteToSettings(palette);
+}
+
+void CreatorStyleEditPlugin::stylesheetChanged(const QString &fileName)
+{
+    QFile styleFile(fileName);
+    styleFile.open(QIODevice::ReadOnly);
+    QString styleContent(QString::fromUtf8(styleFile.readAll().data()));
+
+//    Core::ICore::mainWindow()->setStyleSheet(styleContent);
+    Core::NavigationWidget::instance()->setStyleSheet(styleContent);
+
+//    // QApplication::setPalette doesn't work for relyable for output widgets. So the
+//    // palette must be set explicit on the widget
+//    QWidget *outputPaneManagerWidget = widgetForClass(QStringLiteral("Core::Internal::OutputPaneManager"));
+//    if (outputPaneManagerWidget) {
+//        outputPaneManagerWidget->setStyleSheet(styleContent);
+//    }
 }
 
 Q_EXPORT_PLUGIN2(CreatorStyleEdit, CreatorStyleEditPlugin)
