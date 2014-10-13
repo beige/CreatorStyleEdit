@@ -445,15 +445,20 @@ void CreatorStyleEditPlugin::stylesheetChanged(const QString &fileName)
     styleFile.open(QIODevice::ReadOnly);
     QString styleContent(QString::fromUtf8(styleFile.readAll().data()));
 
-//    Core::ICore::mainWindow()->setStyleSheet(styleContent);
     Core::NavigationWidget::instance()->setStyleSheet(styleContent);
 
-//    // QApplication::setPalette doesn't work for relyable for output widgets. So the
-//    // palette must be set explicit on the widget
-//    QWidget *outputPaneManagerWidget = widgetForClass(QStringLiteral("Core::Internal::OutputPaneManager"));
-//    if (outputPaneManagerWidget) {
-//        outputPaneManagerWidget->setStyleSheet(styleContent);
-//    }
+    // QApplication::setPalette doesn't work for relyable for output widgets. So the
+    // palette must be set explicit on the widget
+    QWidget *outputPaneManagerWidget = widgetForClass(QStringLiteral("Core::Internal::OutputPaneManager"));
+    if (outputPaneManagerWidget) {
+        outputPaneManagerWidget->setStyleSheet(styleContent);
+    }
+
+    QWidget *debuggerWindow = widgetForClass(QStringLiteral("Debugger::DebuggerMainWindow"));
+    if (debuggerWindow) {
+        qDebug() << "Found Debugger window";
+        debuggerWindow->setStyleSheet(styleContent);
+    }
 }
 
 Q_EXPORT_PLUGIN2(CreatorStyleEdit, CreatorStyleEditPlugin)
