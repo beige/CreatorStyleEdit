@@ -36,20 +36,15 @@ public:
 
 private slots:
     void triggerAction();
-    void setPaletteOnClass(const QPalette &palette, const char *className);
-    void paletteChanged(const QPalette &palette);
-    void stylesheetChanged(const QString &fileName);
+    void stylesheetChanged();
 
 private:
-    void applyPaletteOnAllWidgets(const QPalette &palette);
-    QPalette paletteFromSettings() const;
+    QString styleSheetPathFromSettings() const;
+    QColor styleSheetBaseColorFromSetting() const;
     QWidget *widgetForClass(const QString &className);
     QWidget *childWidgetForClass(QWidget *widget, const QString &className);
-    void resetPaletteOnInputChildWidgets(QWidget *widget);
-    void writePaletteToSettings(const QPalette &palette);
-    QString settingsKeyForColorRole(QPalette::ColorRole role) const;
+    void writeStyleSheetToSettings();
     QString settingsKey(const QString &key) const;
-    QColor colorFromSettings(QSettings *settings, QPalette::ColorRole colorRole) const;
     void debugWidget(QWidget *widget);
     StyleEditor *m_styleEditor;
 };

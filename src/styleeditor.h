@@ -25,23 +25,20 @@ public:
     explicit StyleEditor(QWidget *parent = 0);
     ~StyleEditor();
 
-    void setUiFromPalette(const QPalette &palette);
-    QPalette paletteFromUi() const;
+    void setStyleSheetPath(const QString &path);
+    QString styleSheetPathFromUi() const;
+
+    void setStyleSheetBaseColor(const QColor &color);
+    QColor styleSheetBaseColorFromUi() const;
 
 signals:
-    void paletteChanged(const QPalette &palette);
-    void stylesheetChanged(const QString &stylesheetFile);
+    void stylesheetChanged();
 
 private slots:
     void buttonClicked(QAbstractButton *button);
-    void newColorSelected();
-    void exportStyle();
-    void importStyle();
     void selectStyleSheet();
 
 private:
-    QJsonObject paletteToJson(const QPalette &palette);
-    QPalette paletteFromJson(const QJsonObject &json);
     Ui::StyleEditor *ui;
 };
 

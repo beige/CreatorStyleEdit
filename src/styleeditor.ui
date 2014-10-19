@@ -14,304 +14,59 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
+   <item row="0" column="3" rowspan="3">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="stylesheetPathLabel">
+     <property name="text">
+      <string>Path</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="ColorSelectorWidget" name="styleSheetBaseSelector" native="true"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="styleSheetBaseColorLabel">
+     <property name="text">
+      <string>Base Color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="selectStyleSheetPushButton">
+     <property name="text">
+      <string>Select</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
+    <widget class="QLineEdit" name="stylesheetPathLineEdit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>20</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="importPushButton">
-     <property name="text">
-      <string>Import</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="exportPushButton">
-     <property name="text">
-      <string>Export</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" rowspan="4">
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="tabPosition">
-      <enum>QTabWidget::North</enum>
-     </property>
-     <property name="tabShape">
-      <enum>QTabWidget::Rounded</enum>
-     </property>
-     <property name="currentIndex">
-      <number>1</number>
-     </property>
-     <widget class="QWidget" name="paletteTab">
-      <attribute name="title">
-       <string>Palette</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="QScrollArea" name="scrollArea">
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>627</width>
-            <height>655</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <layout class="QFormLayout" name="formLayout">
-             <property name="fieldGrowthPolicy">
-              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-             </property>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>Base</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="ColorSelectorWidget" name="baseSelector" native="true"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>Alternate Base</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="ColorSelectorWidget" name="alternateBaseSelector" native="true"/>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Text</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="ColorSelectorWidget" name="textSelector" native="true"/>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Bright Text</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="ColorSelectorWidget" name="brightTextSelector" native="true"/>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>Window</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="ColorSelectorWidget" name="windowSelector" native="true"/>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Window Text</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="ColorSelectorWidget" name="windowTextSelector" native="true"/>
-             </item>
-             <item row="6" column="0">
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>Light</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="1">
-              <widget class="ColorSelectorWidget" name="lightSelector" native="true"/>
-             </item>
-             <item row="7" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>Midlight</string>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="1">
-              <widget class="ColorSelectorWidget" name="midlightSelector" native="true"/>
-             </item>
-             <item row="8" column="0">
-              <widget class="QLabel" name="label_8">
-               <property name="text">
-                <string>Mid</string>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="1">
-              <widget class="ColorSelectorWidget" name="midSelector" native="true"/>
-             </item>
-             <item row="9" column="0">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Dark</string>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="1">
-              <widget class="ColorSelectorWidget" name="darkSelector" native="true"/>
-             </item>
-             <item row="10" column="1">
-              <widget class="ColorSelectorWidget" name="shadowSelector" native="true"/>
-             </item>
-             <item row="11" column="0">
-              <widget class="QLabel" name="label_9">
-               <property name="text">
-                <string>Button</string>
-               </property>
-              </widget>
-             </item>
-             <item row="11" column="1">
-              <widget class="ColorSelectorWidget" name="buttonSelector" native="true"/>
-             </item>
-             <item row="12" column="0">
-              <widget class="QLabel" name="label_11">
-               <property name="text">
-                <string>Button Text</string>
-               </property>
-              </widget>
-             </item>
-             <item row="12" column="1">
-              <widget class="ColorSelectorWidget" name="buttonTextSelector" native="true"/>
-             </item>
-             <item row="10" column="0">
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>Shadow</string>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="0">
-              <widget class="QLabel" name="label_14">
-               <property name="text">
-                <string>Highlight</string>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="1">
-              <widget class="ColorSelectorWidget" name="highlightSelector" native="true"/>
-             </item>
-             <item row="14" column="0">
-              <widget class="QLabel" name="label_15">
-               <property name="text">
-                <string>Highlighted Text</string>
-               </property>
-              </widget>
-             </item>
-             <item row="14" column="1">
-              <widget class="ColorSelectorWidget" name="highlightedTextSelector" native="true"/>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="stylesheetTab">
-      <attribute name="title">
-       <string>Stylesheet</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="2">
-        <widget class="QPushButton" name="loadStylesheetPushButton">
-         <property name="text">
-          <string>Load Stylesheet</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="selectStyleSheetPushButton">
-         <property name="text">
-          <string>Select</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="stylesheetPathLabel">
-         <property name="text">
-          <string>Path</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="stylesheetPathLineEdit">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-    </widget>
    </item>
   </layout>
  </widget>
