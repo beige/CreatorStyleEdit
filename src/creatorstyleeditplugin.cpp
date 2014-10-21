@@ -142,7 +142,6 @@ void CreatorStyleEditPlugin::setStylesheetOnChildWidgetsWithClass(QWidget *widge
 
         QString childClassName(QString::fromUtf8(childWidget->metaObject()->className()));
         if (childClassName == className) {
-            qDebug() << "Setting stylesheet on childwidget with class " << className;
             childWidget->setStyleSheet(stylesheet);
         }
 
