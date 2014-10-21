@@ -11,15 +11,16 @@
 #include "applicationproxystyle.h"
 #include "styleeditor.h"
 
+#include <utils/stylehelper.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/icontext.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
-#include <utils/stylehelper.h>
-#include <coreplugin/icore.h>
 #include <coreplugin/navigationwidget.h>
+#include <coreplugin/modemanager.h>
+#include <coreplugin/imode.h>
+#include <debugger/debuggerconstants.h>
 
 #include <QSettings>
 #include <QString>
@@ -87,6 +88,9 @@ bool CreatorStyleEditPlugin::delayedInitialize()
     m_styleEditor->setStyleSheetPath(styleSheetPathFromSettings());
     m_styleEditor->setStyleSheetBaseColor(styleSheetBaseColorFromSetting());
 
+    connect(Core::ModeManager::instance(), SIGNAL(currentModeChanged(Core::IMode*)),
+            this, SLOT(modeChanged(Core::IMode*)));
+
     // Give the main stacked widget of the OutputPaneManager a object name for better styling through
     // stylesheet.
     // This code assumes that the OutputPaneManager widget has only one direct child QStackedWidget,
@@ -117,7 +121,6 @@ bool CreatorStyleEditPlugin::delayedInitialize()
 
 void CreatorStyleEditPlugin::extensionsInitialized()
 {
-
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
@@ -125,25 +128,25 @@ ExtensionSystem::IPlugin::ShutdownFlag CreatorStyleEditPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-/*!
- * \brief CreatorStyleEditPlugin::debugWidget Debug prints a widget's Class and its child
- *        widgets classes recursively.
- * \param widget The widget for debug printing
- */
-void CreatorStyleEditPlugin::debugWidget(QWidget *widget)
+void CreatorStyleEditPlugin::setStylesheetOnChildWidgetsWithClass(QWidget *widget,
+                                                                  const QString &stylesheet,
+                                                                  const QString &className)
 {
     foreach (QObject *childObject, widget->children()) {
         if (!childObject->isWidgetType())
             continue;
 
-        QWidget *widget = qobject_cast<QWidget *>(childObject);
-        if (!widget)
+        QWidget *childWidget = qobject_cast<QWidget *>(childObject);
+        if (!childWidget)
             continue;
 
-        QString className(QString::fromUtf8(widget->metaObject()->className()));
-        qDebug() << "Widget class: " << className;
+        QString childClassName(QString::fromUtf8(childWidget->metaObject()->className()));
+        if (childClassName == className) {
+            qDebug() << "Setting stylesheet on childwidget with class " << className;
+            childWidget->setStyleSheet(stylesheet);
+        }
 
-        debugWidget(widget);
+        setStylesheetOnChildWidgetsWithClass(childWidget, stylesheet, className);
     }
 }
 
@@ -200,16 +203,6 @@ QWidget *CreatorStyleEditPlugin::childWidgetForClass(QWidget *widget, const QStr
     return 0;
 }
 
-void CreatorStyleEditPlugin::writeStyleSheetToSettings()
-{
-    QSettings *settings = Core::ICore::settings();
-
-    settings->setValue(settingsKey(styleSheetPathSettingsKey),
-                       m_styleEditor->styleSheetPathFromUi());
-    settings->setValue(settingsKey(styleSheetBaseColorSettingsKey),
-                       m_styleEditor->styleSheetBaseColorFromUi());
-}
-
 QString CreatorStyleEditPlugin::settingsKey(const QString &key) const
 {
     return QString(QStringLiteral("%1/%2"))
@@ -227,6 +220,21 @@ void CreatorStyleEditPlugin::stylesheetChanged()
 {
     writeStyleSheetToSettings();
 
+    applyStylesheet();
+}
+
+void CreatorStyleEditPlugin::writeStyleSheetToSettings()
+{
+    QSettings *settings = Core::ICore::settings();
+
+    settings->setValue(settingsKey(styleSheetPathSettingsKey),
+                       m_styleEditor->styleSheetPathFromUi());
+    settings->setValue(settingsKey(styleSheetBaseColorSettingsKey),
+                       m_styleEditor->styleSheetBaseColorFromUi());
+}
+
+void CreatorStyleEditPlugin::applyStylesheet()
+{
     // Set Qt Creator base color. This color affects the frame around the main window
     Utils::StyleHelper::setBaseColor(m_styleEditor->styleSheetBaseColorFromUi());
 
@@ -245,7 +253,14 @@ void CreatorStyleEditPlugin::stylesheetChanged()
 
     QWidget *debuggerMainWindow = widgetForClass(QStringLiteral("Debugger::DebuggerMainWindow"));
     if (debuggerMainWindow) {
-        debuggerMainWindow->setStyleSheet(styleContent);
+        setStylesheetOnChildWidgetsWithClass(debuggerMainWindow, styleContent, QStringLiteral("QDockWidget"));
+    }
+}
+
+void CreatorStyleEditPlugin::modeChanged(Core::IMode *mode)
+{
+    if (mode->id() == Debugger::Constants::MODE_DEBUG) {
+        stylesheetChanged();
     }
 }
 

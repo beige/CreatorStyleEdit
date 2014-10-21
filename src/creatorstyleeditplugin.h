@@ -15,6 +15,10 @@
 
 class QSettings;
 
+namespace Core {
+class IMode;
+}
+
 namespace CreatorStyleEdit {
 namespace Internal {
 
@@ -37,6 +41,7 @@ public:
 private slots:
     void triggerAction();
     void stylesheetChanged();
+    void modeChanged(Core::IMode *mode);
 
 private:
     QString styleSheetPathFromSettings() const;
@@ -45,7 +50,9 @@ private:
     QWidget *childWidgetForClass(QWidget *widget, const QString &className);
     void writeStyleSheetToSettings();
     QString settingsKey(const QString &key) const;
-    void debugWidget(QWidget *widget);
+    void setStylesheetOnChildWidgetsWithClass(QWidget *widget, const QString &stylesheet,
+                                              const QString &className);
+    void applyStylesheet();
     StyleEditor *m_styleEditor;
 };
 
