@@ -1,0 +1,32 @@
+Core--Internal--NavigationSubWidget QWidget,
+#OutputPaneManagerMainWidget,
+#OutputPaneManagerMainWidget QWidget,
+Debugger--DebuggerMainWindow QTreeView {
+  background-color: #1E1E27;
+  color: #FFFFFF;
+}
+
+Utils--StyledBar,
+Utils--StyledBar[panelwidget="true"] {
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, 
+                                    stop:0 rgba(130, 130, 150, 255), 
+                                    stop:1 rgba(67, 67, 87, 255));
+}
+
+QAbstractItemView,
+QComboBox {
+   selection-color: black;
+   selection-background-color: #efefff;
+}
+
+QTreeView::item:hover,
+QListView::item:hover {
+   color: black;
+   background-color: #efefff;
+}
+
+Core--Internal--NavigationSubWidget QTreeView,
+Core--Internal--NavigationSubWidget QListView,
+Debugger--DebuggerMainWindow QTreeView {
+  border-right: 1px solid #333333;
+}

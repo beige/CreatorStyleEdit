@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QAbstractButton>
+#include <QListWidgetItem>
 
 #include "defines.h"
 #include "styleeditor.h"
@@ -18,7 +19,9 @@ using namespace CreatorStyleEdit::Internal;
 
 StyleEditor::StyleEditor(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::StyleEditor)
+    ui(new Ui::StyleEditor),
+    m_noStyleItem(0),
+    m_customStyleItem(0)
 {
     ui->setupUi(this);
     connect(ui->buttonBox, &QDialogButtonBox::clicked,
@@ -32,6 +35,17 @@ StyleEditor::StyleEditor(QWidget *parent) :
             this, &StyleEditor::raise);
     connect(ui->styleSheetBaseSelector, &ColorSelectorWidget::colorChanged,
             this, &StyleEditor::stylesheetChanged);
+
+    m_noStyleItem = new QListWidgetItem(tr("No Style"));
+    m_customStyleItem = new QListWidgetItem(tr("Custom Style"));
+
+    ui->styleListWidget->addItem(m_noStyleItem);
+    ui->styleListWidget->addItem(m_customStyleItem);
+
+    connect(ui->styleListWidget, &QListWidget::currentItemChanged,
+            this, &StyleEditor::currentStyleListItemChanged);
+
+    ui->styleListWidget->setCurrentItem(m_noStyleItem);
 }
 
 StyleEditor::~StyleEditor()
@@ -83,4 +97,11 @@ void StyleEditor::selectStyleSheet()
     ui->stylesheetPathLineEdit->setText(file);
 
     emit stylesheetChanged();
+}
+
+void StyleEditor::currentStyleListItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+
+    ui->customStyleGroupBox->setEnabled(current == m_customStyleItem);
 }

@@ -1,0 +1,12 @@
+                   ## Fireworks Color Scheme ##
+                   ############################ 
+    
+This color scheme is based on the Inkpot color scheme used in Qt Creator.
+which was adapted by Jan Kundrát from the vim Inkpot color scheme created
+by Ciaran McCreesh.
+
+It was created for a better differentiation between variables, constants,
+virtual methods, ...
+
+Author:
+Thomas Baumann

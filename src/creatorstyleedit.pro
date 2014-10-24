@@ -58,3 +58,6 @@ FORMS += \
     styleeditor.ui \
     colorselectorwidget.ui
 
+RESOURCES += \
+    styles/stlyes.qrc
+

@@ -13,6 +13,7 @@
 #include "ui_styleeditor.h"
 
 class QAbstractButton;
+class QListWidgetItem;
 
 namespace CreatorStyleEdit {
 namespace Internal {
@@ -37,9 +38,12 @@ signals:
 private slots:
     void buttonClicked(QAbstractButton *button);
     void selectStyleSheet();
+    void currentStyleListItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
     Ui::StyleEditor *ui;
+    QListWidgetItem *m_noStyleItem;
+    QListWidgetItem *m_customStyleItem;
 };
 
 } // namespace Internal

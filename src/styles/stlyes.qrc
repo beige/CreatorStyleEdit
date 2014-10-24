@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/CreatorStyleEdit/styles">
+        <file>Fireworks/fireworks.css</file>
+        <file>Fireworks/fireworks.xml</file>
+        <file>Fireworks/README</file>
+    </qresource>
+</RCC>
