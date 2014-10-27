@@ -140,8 +140,7 @@ void CreatorStyleEditPlugin::setStylesheetOnChildWidgetsWithClass(QWidget *widge
         if (!childWidget)
             continue;
 
-        QString childClassName(QString::fromUtf8(childWidget->metaObject()->className()));
-        if (childClassName == className) {
+        if (childWidget->inherits(className.toUtf8())) {
             childWidget->setStyleSheet(stylesheet);
         }
 
