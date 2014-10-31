@@ -15,6 +15,7 @@ namespace CreatorStyleEdit {
 namespace Internal {
 
 static const QString styleSheetPathSettingsKey(QStringLiteral("stylesheet path"));
+static const QString selectedStyleSettingsKey(QStringLiteral("selected style"));
 static const QString styleSheetBaseColorSettingsKey(QLatin1String("stylesheet base color"));
 
 } // namespace Internal

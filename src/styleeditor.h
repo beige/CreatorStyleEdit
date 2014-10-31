@@ -26,14 +26,19 @@ public:
     explicit StyleEditor(QWidget *parent = 0);
     ~StyleEditor();
 
-    void setStyleSheetPath(const QString &path);
-    QString styleSheetPathFromUi() const;
+    void setCustomStyleSheetPath(const QString &path);
+    void setSelectedStyle(const QString &styleName);
+    QString selectedStyle() const;
+    QString styleSheetPath() const;
+    QString customStyleSheetPath() const;
 
     void setStyleSheetBaseColor(const QColor &color);
     QColor styleSheetBaseColorFromUi() const;
 
+    void initStyleListView();
 signals:
     void stylesheetChanged();
+    void styleNameChanged(const QString &styleName);
 
 private slots:
     void buttonClicked(QAbstractButton *button);
@@ -41,9 +46,16 @@ private slots:
     void currentStyleListItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
+    enum StyleFileType {
+        CssFile = Qt::UserRole + 1,
+        ColorSchemeFile = Qt::UserRole + 2,
+        ReadmeFile = Qt::UserRole + 3
+    };
+
     Ui::StyleEditor *ui;
     QListWidgetItem *m_noStyleItem;
     QListWidgetItem *m_customStyleItem;
+    QString m_currentStyleSheetPath;
 };
 
 } // namespace Internal

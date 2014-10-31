@@ -61,8 +61,13 @@ bool CreatorStyleEditPlugin::initialize(const QStringList &arguments, QString *e
     Q_UNUSED(errorString)
 
     m_styleEditor = new StyleEditor;
+    m_styleEditor->setSelectedStyle(selectedStyleFromSettings());
+    m_styleEditor->setCustomStyleSheetPath(customStyleSheetPathFromSettings());
+    m_styleEditor->setStyleSheetBaseColor(styleSheetBaseColorFromSetting());
     connect(m_styleEditor, &StyleEditor::stylesheetChanged,
             this, &CreatorStyleEditPlugin::stylesheetChanged);
+    connect(m_styleEditor, &StyleEditor::styleNameChanged,
+            this, &CreatorStyleEditPlugin::styleNameChanged);
 
     QAction *action = new QAction(tr("Edit Style"), this);
     Core::Command *cmd = Core::ActionManager::registerAction(action, Constants::ACTION_ID,
@@ -84,9 +89,6 @@ bool CreatorStyleEditPlugin::delayedInitialize()
 
     ApplicationProxyStyle *style = new ApplicationProxyStyle(applicationStyle);
     qApp->setStyle(style);
-
-    m_styleEditor->setStyleSheetPath(styleSheetPathFromSettings());
-    m_styleEditor->setStyleSheetBaseColor(styleSheetBaseColorFromSetting());
 
     connect(Core::ModeManager::instance(), SIGNAL(currentModeChanged(Core::IMode*)),
             this, SLOT(modeChanged(Core::IMode*)));
@@ -148,10 +150,16 @@ void CreatorStyleEditPlugin::setStylesheetOnChildWidgetsWithClass(QWidget *widge
     }
 }
 
-QString CreatorStyleEditPlugin::styleSheetPathFromSettings() const
+QString CreatorStyleEditPlugin::customStyleSheetPathFromSettings() const
 {
     QSettings *settings = Core::ICore::settings();
     return settings->value(settingsKey(styleSheetPathSettingsKey)).toString();
+}
+
+QString CreatorStyleEditPlugin::selectedStyleFromSettings() const
+{
+    QSettings *settings = Core::ICore::settings();
+    return settings->value(settingsKey(selectedStyleSettingsKey)).toString();
 }
 
 QColor CreatorStyleEditPlugin::styleSheetBaseColorFromSetting() const
@@ -221,14 +229,23 @@ void CreatorStyleEditPlugin::stylesheetChanged()
     applyStylesheet();
 }
 
+void CreatorStyleEditPlugin::styleNameChanged(const QString &styleName)
+{
+    writeStyleSheetToSettings();
+
+    applyStylesheet();
+}
+
 void CreatorStyleEditPlugin::writeStyleSheetToSettings()
 {
     QSettings *settings = Core::ICore::settings();
 
     settings->setValue(settingsKey(styleSheetPathSettingsKey),
-                       m_styleEditor->styleSheetPathFromUi());
+                       m_styleEditor->customStyleSheetPath());
     settings->setValue(settingsKey(styleSheetBaseColorSettingsKey),
                        m_styleEditor->styleSheetBaseColorFromUi());
+    settings->setValue(settingsKey(selectedStyleSettingsKey),
+                       m_styleEditor->selectedStyle());
 }
 
 void CreatorStyleEditPlugin::applyStylesheet()
@@ -236,9 +253,14 @@ void CreatorStyleEditPlugin::applyStylesheet()
     // Set Qt Creator base color. This color affects the frame around the main window
     Utils::StyleHelper::setBaseColor(m_styleEditor->styleSheetBaseColorFromUi());
 
-    QFile styleFile(m_styleEditor->styleSheetPathFromUi());
+    QString styleSheetPath = m_styleEditor->styleSheetPath();
+    if (styleSheetPath.isEmpty())
+        return;
+
+    QFile styleFile(styleSheetPath);
     styleFile.open(QIODevice::ReadOnly);
     QString styleContent(QString::fromUtf8(styleFile.readAll().data()));
+    styleFile.close();
 
     Core::NavigationWidget::instance()->setStyleSheet(styleContent);
 

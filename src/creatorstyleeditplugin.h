@@ -41,10 +41,12 @@ public:
 private slots:
     void triggerAction();
     void stylesheetChanged();
+    void styleNameChanged(const QString &styleName);
     void modeChanged(Core::IMode *mode);
 
 private:
-    QString styleSheetPathFromSettings() const;
+    QString customStyleSheetPathFromSettings() const;
+    QString selectedStyleFromSettings() const;
     QColor styleSheetBaseColorFromSetting() const;
     QWidget *widgetForClass(const QString &className);
     QWidget *childWidgetForClass(QWidget *widget, const QString &className);
