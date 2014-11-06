@@ -32,9 +32,6 @@ public:
     QString styleSheetPath() const;
     QString customStyleSheetPath() const;
 
-    void setStyleSheetBaseColor(const QColor &color);
-    QColor styleSheetBaseColorFromUi() const;
-
     void initStyleListView();
 signals:
     void stylesheetChanged();

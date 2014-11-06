@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="4" rowspan="6">
+   <item row="0" column="3" rowspan="6">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -24,14 +24,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="styleSheetBaseColorLabel">
-     <property name="text">
-      <string>Base Color:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
+   <item row="5" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -44,7 +37,7 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" colspan="4">
+   <item row="2" column="0" colspan="3">
     <widget class="QGroupBox" name="customStyleGroupBox">
      <property name="title">
       <string>Custom Style</string>
@@ -74,7 +67,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="3" rowspan="2">
+   <item row="3" column="2" rowspan="2">
     <widget class="QTextEdit" name="styleDescriptionTextEdit">
      <property name="undoRedoEnabled">
       <bool>false</bool>
@@ -84,22 +77,11 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3">
+   <item row="3" column="0" colspan="2">
     <widget class="QListWidget" name="styleListWidget"/>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="ColorSelectorWidget" name="styleSheetBaseSelector" native="true"/>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ColorSelectorWidget</class>
-   <extends>QWidget</extends>
-   <header>colorselectorwidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

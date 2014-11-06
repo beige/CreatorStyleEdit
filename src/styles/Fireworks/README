@@ -8,7 +8,16 @@ by Ciaran McCreesh.
 It was created for a better differentiation between variables, constants,
 virtual methods, ...
 
-This theme uses a background color of #1E1E27 (r30, g30, b39)
+Install
+---------
+
+This theme uses a background color of #1E1E27 (r30, g30, b39). This can be set
+under Tools > Options > Environment > General > User Interface > Color
+
+The Fireworks color scheme will be installed in the Qt Creator installation 
+directory. To apply the scheme, go to 
+Tools > Options > Text Editor > Font & Colors > Color Scheme and apply the 
+Fireworks scheme.
 
 Author:
 Thomas Baumann

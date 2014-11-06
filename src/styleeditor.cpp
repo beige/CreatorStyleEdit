@@ -37,8 +37,6 @@ StyleEditor::StyleEditor(QWidget *parent) :
     // Raise this dialog for MAC OS X
     connect(this, &StyleEditor::stylesheetChanged,
             this, &StyleEditor::raise);
-    connect(ui->styleSheetBaseSelector, &ColorSelectorWidget::colorChanged,
-            this, &StyleEditor::stylesheetChanged);
 
     m_noStyleItem = new QListWidgetItem(tr("No Style"));
     m_customStyleItem = new QListWidgetItem(tr("Custom Style"));
@@ -166,16 +164,6 @@ QString StyleEditor::styleSheetPath() const
 QString StyleEditor::customStyleSheetPath() const
 {
     return ui->stylesheetPathLineEdit->text();
-}
-
-void StyleEditor::setStyleSheetBaseColor(const QColor &color)
-{
-    ui->styleSheetBaseSelector->setColor(color);
-}
-
-QColor StyleEditor::styleSheetBaseColorFromUi() const
-{
-    return ui->styleSheetBaseSelector->color();
 }
 
 void StyleEditor::buttonClicked(QAbstractButton *button)

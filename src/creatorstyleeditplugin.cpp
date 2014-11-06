@@ -63,7 +63,6 @@ bool CreatorStyleEditPlugin::initialize(const QStringList &arguments, QString *e
     m_styleEditor = new StyleEditor;
     m_styleEditor->setSelectedStyle(selectedStyleFromSettings());
     m_styleEditor->setCustomStyleSheetPath(customStyleSheetPathFromSettings());
-    m_styleEditor->setStyleSheetBaseColor(styleSheetBaseColorFromSetting());
     connect(m_styleEditor, &StyleEditor::stylesheetChanged,
             this, &CreatorStyleEditPlugin::stylesheetChanged);
     connect(m_styleEditor, &StyleEditor::styleNameChanged,
@@ -162,14 +161,6 @@ QString CreatorStyleEditPlugin::selectedStyleFromSettings() const
     return settings->value(settingsKey(selectedStyleSettingsKey)).toString();
 }
 
-QColor CreatorStyleEditPlugin::styleSheetBaseColorFromSetting() const
-{
-    QSettings *settings = Core::ICore::settings();
-    QColor color(settings->value(settingsKey(styleSheetBaseColorSettingsKey)).toString());
-
-    return color;
-}
-
 QWidget *CreatorStyleEditPlugin::widgetForClass(const QString &className)
 {
     foreach (QWidget *topLevelWidget, QApplication::topLevelWidgets()) {
@@ -229,7 +220,7 @@ void CreatorStyleEditPlugin::stylesheetChanged()
     applyStylesheet();
 }
 
-void CreatorStyleEditPlugin::styleNameChanged(const QString &styleName)
+void CreatorStyleEditPlugin::styleNameChanged(const QString &)
 {
     writeStyleSheetToSettings();
 
@@ -242,17 +233,12 @@ void CreatorStyleEditPlugin::writeStyleSheetToSettings()
 
     settings->setValue(settingsKey(styleSheetPathSettingsKey),
                        m_styleEditor->customStyleSheetPath());
-    settings->setValue(settingsKey(styleSheetBaseColorSettingsKey),
-                       m_styleEditor->styleSheetBaseColorFromUi());
     settings->setValue(settingsKey(selectedStyleSettingsKey),
                        m_styleEditor->selectedStyle());
 }
 
 void CreatorStyleEditPlugin::applyStylesheet()
 {
-    // Set Qt Creator base color. This color affects the frame around the main window
-    Utils::StyleHelper::setBaseColor(m_styleEditor->styleSheetBaseColorFromUi());
-
     QString styleSheetPath = m_styleEditor->styleSheetPath();
     if (styleSheetPath.isEmpty())
         return;
