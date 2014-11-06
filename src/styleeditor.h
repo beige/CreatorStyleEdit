@@ -32,7 +32,6 @@ public:
     QString styleSheetPath() const;
     QString customStyleSheetPath() const;
 
-    void initStyleListView();
 signals:
     void stylesheetChanged();
     void styleNameChanged(const QString &styleName);
@@ -41,8 +40,10 @@ private slots:
     void buttonClicked(QAbstractButton *button);
     void selectStyleSheet();
     void currentStyleListItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void exportCurrentStyle();
 
 private:
+    void initStyleListView();
     enum StyleFileType {
         CssFile = Qt::UserRole + 1,
         ColorSchemeFile = Qt::UserRole + 2,

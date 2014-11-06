@@ -33,6 +33,8 @@ StyleEditor::StyleEditor(QWidget *parent) :
 
     connect(ui->selectStyleSheetPushButton, &QPushButton::clicked,
             this, &StyleEditor::selectStyleSheet);
+    connect(ui->exportPushButton, &QPushButton::clicked,
+            this, &StyleEditor::exportCurrentStyle);
 
     // Raise this dialog for MAC OS X
     connect(this, &StyleEditor::stylesheetChanged,
@@ -44,16 +46,13 @@ StyleEditor::StyleEditor(QWidget *parent) :
     ui->styleListWidget->addItem(m_noStyleItem);
     ui->styleListWidget->addItem(m_customStyleItem);
 
-    // Qt Creator styles dir
-//    QString resourcePath = Core::ICore::resourcePath();
-//    QDir styleDir(resourcePath + QLatin1String("/styles"));
-
     initStyleListView();
 
     connect(ui->styleListWidget, &QListWidget::currentItemChanged,
             this, &StyleEditor::currentStyleListItemChanged);
 
     ui->styleListWidget->setCurrentItem(m_noStyleItem);
+    ui->exportPushButton->setEnabled(false);
 }
 
 void StyleEditor::initStyleListView()
@@ -129,7 +128,6 @@ void StyleEditor::setCustomStyleSheetPath(const QString &path)
 void StyleEditor::setSelectedStyle(const QString &styleName)
 {
     if (styleName.isEmpty()) {
-        ui->styleListWidget->setCurrentItem(m_noStyleItem);
         emit styleNameChanged(m_noStyleItem->text());
         return;
     }
@@ -198,20 +196,61 @@ void StyleEditor::currentStyleListItemChanged(QListWidgetItem *current, QListWid
 
     ui->customStyleGroupBox->setEnabled(current == m_customStyleItem);
     if (current == m_noStyleItem) {
+        ui->exportPushButton->setEnabled(false);
         ui->styleDescriptionTextEdit->setText(tr("<h3>No style sheet</h3>"
                                                  "<p>No style sheet will be set for Qt Creator. "
                                                  "Restart required.</p>"));
         m_currentStyleSheetPath.clear();
     } else if (current == m_customStyleItem) {
+        ui->exportPushButton->setEnabled(false);
         ui->styleDescriptionTextEdit->setText(tr("<h3>Custon style sheet</h3>"
-                                                 "<p>A path to a custom stylesheet can be set.</p>"));
+                                                 "<p>This style uses a custom stylesheet.</p>"));
         m_currentStyleSheetPath = ui->stylesheetPathLineEdit->text();
     } else {
-        // Custom style
+        ui->exportPushButton->setEnabled(true);
         ui->styleDescriptionTextEdit->setText(current->data(ReadmeFile).toString());
         m_currentStyleSheetPath = current->data(CssFile).toString();
     }
 
     emit stylesheetChanged();
     emit styleNameChanged(current->text());
+}
+
+void StyleEditor::exportCurrentStyle()
+{
+    QString exportFileName = QFileDialog::getSaveFileName(this, tr("Save stylesheet"), QDir::homePath(),
+                                                    QStringLiteral("CSS (*.css)"));
+
+    if (exportFileName.isEmpty()) {
+        return;
+    }
+
+    QDir stylesBaseDir(QStringLiteral(":/CreatorStyleEdit/styles/"));
+    stylesBaseDir.cd(ui->styleListWidget->currentItem()->text());
+
+    QString schemeStylesheet;
+    foreach (const QFileInfo styleFile, stylesBaseDir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
+        if (styleFile.fileName().endsWith(QStringLiteral(".css"))) {
+            schemeStylesheet = styleFile.absoluteFilePath();
+            break;
+        }
+    }
+
+    if (schemeStylesheet.isEmpty()) {
+        return;
+    }
+
+    QFile outputFile(exportFileName);
+    if (!outputFile.open(QIODevice::WriteOnly)) {
+        return;
+    }
+
+    QFile exportFile(schemeStylesheet);
+    if (!exportFile.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
+    outputFile.write(exportFile.readAll());
+    outputFile.close();
+    exportFile.close();
 }
